@@ -30,6 +30,7 @@ RUN git clone https://gitlab.com/timvisee/send.git /tmp/send \
     && cp -r /tmp/send/package-lock.json ./ \
     && cp -r /tmp/send/app ./app \
     && cp -r /tmp/send/common ./common \
+    && mkdir -p ./public/locales \
     && cp -r /tmp/send/public/locales ./public/locales \
     && cp -r /tmp/send/server ./server \
     && rm -rf /tmp/send
