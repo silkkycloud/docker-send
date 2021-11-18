@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+
+  server:
+    image: ghcr.io/silkkycloud/send:latest
+    hostname: send
+    networks:
+      - public
+      - backend
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - "node.hostname == main-2"
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.3'
+          memory: 256M
+    environment:
+      - NODE_ENV=production
+      # Networking
+      - VIRTUAL_HOST=${SEND_HOSTNAME}
+      - VIRTUAL_PORT=443
+      - BASE_URL=https://${SEND_HOSTNAME}
+      - PORT=8080
+      # Redis
+      - REDIS_HOST=redis
+      # Storage
+      - AWS_ACCESS_KEY_ID=${S3_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${S3_SECRET_KEY}
+      - S3_BUCKET=${S3_BUCKET_NAME}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - S3_USE_PATH_STYLE_ENDPOINT=true
+      # Storage Limit
+      - MAX_FILE_SIZE=21474836480
+
+  redis:
+    image: redis:6.2.6-alpine
+    hostname: redis
+    networks:
+      - backend
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - "node.hostname == main-2"
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 50M
+    volumes:
+      - redis_database:/data
+
+networks:
+  public:
+    external: true
+
+  backend:
+    driver: overlay
+    internal: true
+    driver_opts:
+      encrypted: "true"
+      com.docker.network.driver.mtu: 1450
+
+volumes:
+  redis_database:
