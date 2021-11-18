@@ -29,8 +29,6 @@ WORKDIR /send
 RUN adduser --disabled-password --gecos "" --no-create-home send
 RUN chown -R send:send /send
 
-USER send
-
 COPY --from=builder --chown=send:send /send/package*.json ./
 COPY --from=builder --chown=send:send /send/app app
 COPY --from=builder --chown=send:send /send/common common
@@ -45,9 +43,11 @@ RUN ln -s dist/version.json version.json
 
 ENV PORT=8080
 
+USER send
+
 EXPOSE 8080
 
-CMD ["node", "server/bin/prod.js"]
+CMD ["node", "./server/bin/prod.js"]
 
 STOPSIGNAL SIGTERM
 
