@@ -26,8 +26,7 @@ RUN apk add --no-cache git
 WORKDIR /send
 
 # Create directory structure
-RUN \
-    mkdir -p ./app \
+RUN mkdir -p ./app \
     && mkdir -p ./common \
     && mkdir -p ./public/locales \
     && mkdir -p ./server
