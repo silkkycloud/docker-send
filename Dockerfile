@@ -1,7 +1,7 @@
 ####################################################################################################
 ## Builder
 ####################################################################################################
-FROM node:current-alpine3.14 AS builder
+FROM node:current-alpine AS builder
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
 RUN apk add --no-cache git
@@ -18,7 +18,7 @@ RUN set -x \
 ####################################################################################################
 ## Final image
 ####################################################################################################
-FROM node:current-alpine3.14
+FROM node:current-alpine
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
 RUN apk add --no-cache git
