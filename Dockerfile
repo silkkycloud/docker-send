@@ -4,11 +4,17 @@
 FROM node:current-alpine AS builder
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
-RUN apk add --no-cache git
+RUN apk add --no-cache \ 
+    ca-certificates \
+    git
 
 WORKDIR /send
 
-RUN git clone https://gitlab.com/timvisee/send.git /send
+RUN --mount=type=cache,target=/tmp/git_cache \
+    git clone https://gitlab.com/timvisee/send.git /tmp/git_cache/send; \
+    cd /tmp/git_cache/send \ 
+    && git pull \
+    && cp -r ./ /send
 
 RUN set -x \
     # Build
@@ -21,13 +27,18 @@ RUN set -x \
 FROM node:current-alpine
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
-RUN apk add --no-cache git
+ENV PORT=8080
+
+RUN apk add --no-cache \ 
+    ca-certificates \
+    git \
+    tini
 
 WORKDIR /send
 
-# Add non root user
-RUN adduser --disabled-password --gecos "" --no-create-home send
-RUN chown -R send:send /send
+# Add an unprivileged user and set directory permissions
+RUN adduser --disabled-password --gecos "" --no-create-home send \
+    && chown -R send:send /send
 
 COPY --from=builder --chown=send:send /send/package*.json ./
 COPY --from=builder --chown=send:send /send/app app
@@ -41,13 +52,13 @@ RUN npm ci --production \
 RUN mkdir -p /send/.config/configstore
 RUN ln -s dist/version.json version.json
 
-ENV PORT=8080
+ENTRYPOINT ["/sbin/tini", "--"]
 
 USER send
 
-EXPOSE 8080
-
 CMD ["node", "./server/bin/prod.js"]
+
+EXPOSE 8080
 
 STOPSIGNAL SIGTERM
 
