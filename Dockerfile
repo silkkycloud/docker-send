@@ -10,11 +10,9 @@ RUN apk add --no-cache \
 
 WORKDIR /send
 
-RUN --mount=type=cache,target=/tmp/git_cache \
-    git clone https://gitlab.com/timvisee/send.git /tmp/git_cache/send; \
-    cd /tmp/git_cache/send \ 
-    && git pull \
-    && cp -r ./ /send
+ADD https://gitlab.com/timvisee/send/-/archive/master/send-master.tar.gz /tmp/send-master.tar.gz
+RUN tar xvfz /tmp/send-master.tar.gz -C /tmp \
+    && cp -r /tmp/send-master/. /send
 
 RUN set -x \
     # Build
