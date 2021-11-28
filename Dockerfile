@@ -2,6 +2,7 @@
 ## Builder
 ####################################################################################################
 FROM node:current-alpine AS builder
+
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
 RUN apk add --no-cache \ 
