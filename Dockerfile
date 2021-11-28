@@ -6,7 +6,7 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 
 RUN apk add --no-cache \ 
     ca-certificates \
-    git
+    tar
 
 WORKDIR /send
 
