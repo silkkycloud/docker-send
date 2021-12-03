@@ -1,9 +1,7 @@
 ####################################################################################################
 ## Builder
 ####################################################################################################
-FROM node:current-alpine AS builder
-
-ENV NODE_OPTIONS=--openssl-legacy-provider
+FROM node:16.13-alpine3.14 AS builder
 
 RUN apk add --no-cache \ 
     ca-certificates \
@@ -23,8 +21,7 @@ RUN set -x \
 ####################################################################################################
 ## Final image
 ####################################################################################################
-FROM node:current-alpine
-ENV NODE_OPTIONS=--openssl-legacy-provider
+FROM node:16.13-alpine3.14
 
 ENV PORT=8080
 
