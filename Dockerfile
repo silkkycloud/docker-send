@@ -63,3 +63,11 @@ HEALTHCHECK \
     --interval=1m \
     --timeout=3s \
     CMD wget --spider --q http://localhost:8080/ || exit 1
+
+# Image metadata
+LABEL org.opencontainers.image.title=Send
+LABEL org.opencontainers.image.description="Simple, private file sharing. Send lets you share files with end-to-end encryption and a link that automatically expires. So you can keep what you share private and make sure your stuff doesn’t stay online forever."
+LABEL org.opencontainers.image.url=https://send.silkky.cloud
+LABEL org.opencontainers.image.vendor="Silkky.Cloud"
+LABEL org.opencontainers.image.licenses=Unlicense
+LABEL org.opencontainers.image.source="https://github.com/silkkycloud/docker-send"
