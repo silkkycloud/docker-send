@@ -24,12 +24,24 @@ services:
         reservations:
           cpus: '0.3'
           memory: 256M
+      labels:
+        - "traefik.enable=true"
+        # Router
+        - "traefik.http.routers.send.rule=Host(`${HOSTNAME}`)"
+        - "traefik.http.routers.send.entrypoints=websecure"
+        - "traefik.http.routers.send.tls=true"
+        - "traefik.http.routers.send.service=send-service"
+        # Service
+        - "traefik.http.services.send-service.loadbalancer.server.port=8080"
+        - "traefik.http.services.send-service.loadbalancer.sticky.cookie=true"
+        - "traefik.http.services.send-service.loadbalancer.sticky.cookie.secure=true"
+        - "traefik.http.services.send-service.loadbalancer.sticky.cookie.samesite=strict"
     environment:
       - NODE_ENV=production
       # Networking
-      - VIRTUAL_HOST=${SEND_HOSTNAME}
+      - VIRTUAL_HOST=${HOSTNAME}
       - VIRTUAL_PORT=443
-      - BASE_URL=https://${SEND_HOSTNAME}
+      - BASE_URL=https://${HOSTNAME}
       - PORT=8080
       # Redis
       - REDIS_HOST=redis
