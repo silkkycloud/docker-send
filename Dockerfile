@@ -1,7 +1,11 @@
+ARG SEND_VERSION=3.4.15
+
 ####################################################################################################
 ## Builder
 ####################################################################################################
 FROM node:16.13-alpine3.14 AS builder
+
+ARG SEND_VERSION
 
 RUN apk add --no-cache \ 
     ca-certificates \
@@ -9,9 +13,9 @@ RUN apk add --no-cache \
 
 WORKDIR /send
 
-ADD https://gitlab.com/timvisee/send/-/archive/master/send-master.tar.gz /tmp/send-master.tar.gz
-RUN tar xvfz /tmp/send-master.tar.gz -C /tmp \
-    && cp -r /tmp/send-master/. /send
+ADD https://gitlab.com/timvisee/send/-/archive/v${SEND_VERSION}/send-v${SEND_VERSION}.tar.gz /tmp/send-v${SEND_VERSION}.tar.gz
+RUN tar xvfz /tmp/send-v${SEND_VERSION}.tar.gz -C /tmp \
+    && cp -r /tmp/send-v${SEND_VERSION}/. /send
 
 RUN set -x \
     # Build
@@ -22,6 +26,8 @@ RUN set -x \
 ## Final image
 ####################################################################################################
 FROM node:16.13-alpine3.14
+
+ARG SEND_VERSION
 
 ENV PORT=8080
 
@@ -65,6 +71,7 @@ HEALTHCHECK \
     CMD wget --spider --q http://localhost:8080/ || exit 1
 
 # Image metadata
+LABEL org.opencontainers.image.version=${SEND_VERSION}
 LABEL org.opencontainers.image.title=Send
 LABEL org.opencontainers.image.description="Simple, private file sharing. Send lets you share files with end-to-end encryption and a link that automatically expires. So you can keep what you share private and make sure your stuff doesn’t stay online forever."
 LABEL org.opencontainers.image.url=https://send.silkky.cloud
