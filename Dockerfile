@@ -1,4 +1,4 @@
-ARG SEND_VERSION=3.4.15
+ARG SEND_VERSION=3.4.16
 
 ####################################################################################################
 ## Builder
@@ -7,7 +7,7 @@ FROM node:16.13-alpine3.14 AS builder
 
 ARG SEND_VERSION
 
-RUN apk add --no-cache \ 
+RUN apk add --no-cache \
     ca-certificates \
     tar
 
@@ -31,7 +31,7 @@ ARG SEND_VERSION
 
 ENV PORT=8080
 
-RUN apk add --no-cache \ 
+RUN apk add --no-cache \
     ca-certificates \
     git \
     tini
