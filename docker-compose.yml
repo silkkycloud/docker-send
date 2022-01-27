@@ -30,7 +30,10 @@ services:
         - "traefik.http.routers.send.rule=Host(`${HOSTNAME}`)"
         - "traefik.http.routers.send.entrypoints=websecure"
         - "traefik.http.routers.send.tls=true"
+        - "traefik.http.routers.send.middlewares=send-headers"
         - "traefik.http.routers.send.service=send-service"
+        # Middleware
+        - "traefik.http.middlewares.send-headers.headers.framedeny=true"
         # Service
         - "traefik.http.services.send-service.loadbalancer.server.port=8080"
         - "traefik.http.services.send-service.loadbalancer.sticky.cookie=true"
