@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   server:
-    image: ghcr.io/silkkycloud/send:3.4.16
+    image: ghcr.io/silkkycloud/send:3.4.17
     hostname: send
     networks:
       - public
