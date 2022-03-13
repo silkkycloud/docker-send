@@ -14,9 +14,6 @@ services:
       placement:
         constraints:
           - "node.labels.web_server == true"
-      update_config:
-        failure_action: rollback
-        order: start-first
       resources:
         limits:
           cpus: '4'
