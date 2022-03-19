@@ -12,6 +12,7 @@ services:
       mode: replicated
       replicas: 6
       placement:
+        max_replicas_per_node: 2
         constraints:
           - "node.labels.web_server == true"
       resources:
@@ -83,7 +84,6 @@ networks:
     driver: overlay
     internal: true
     driver_opts:
-      encrypted: "true"
       com.docker.network.driver.mtu: 1450
 
 volumes:
