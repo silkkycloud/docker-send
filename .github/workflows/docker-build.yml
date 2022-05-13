@@ -42,7 +42,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/silkkycloud/send:latest,ghcr.io/silkkycloud/send:3.4.19
+          tags: ghcr.io/silkkycloud/send:latest,ghcr.io/silkkycloud/send:3.4.20
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
